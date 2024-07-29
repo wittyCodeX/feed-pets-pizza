@@ -6,7 +6,12 @@ import Link from "next/link";
 import WalletConnectMolal from "./WalletConnectMolal";
 
 function Header() {
+  const [address, setAddress] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const connectWallet = (address: string) => {
+    setAddress(address);
+  };
 
   const onClose = (params: boolean) => {
     setIsOpen(params);
@@ -29,11 +34,15 @@ function Header() {
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-center gap-x-4 py-3 px-4 text-white text-[18px] h-[48px] min-w-[178px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
-          connect wallet
+          {address || "connect wallet"}
         </button>
       </div>
 
-      <WalletConnectMolal isOpen={isOpen} onClose={onClose} />
+      <WalletConnectMolal
+        isOpen={isOpen}
+        onClose={onClose}
+        connectWallet={connectWallet}
+      />
     </div>
   );
 }

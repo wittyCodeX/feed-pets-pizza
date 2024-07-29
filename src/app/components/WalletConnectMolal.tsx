@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import Image from "next/image";
 import Modal from "react-modal";
+import Wallet from "sats-connect";
 
 type WalletModalProps = {
   isOpen: boolean;
   onClose: (params: boolean) => void;
+  connectWallet: (address: string) => void;
 };
 
 const customStyles = {
@@ -19,7 +21,50 @@ const customStyles = {
   },
 };
 
-const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
+const WalletConnectMolal = ({
+  isOpen,
+  onClose,
+  connectWallet,
+}: WalletModalProps) => {
+  const handleConnectUnisatWallet = async () => {
+    try {
+      if (typeof window.unisat !== "undefined") {
+        let accounts = await window.unisat.requestAccounts();
+        if (accounts) {
+          onClose(false);
+          connectWallet(accounts[0]);
+          console.log("connect success", accounts);
+        }
+      } else {
+        console.log("UniSat Wallet is not installed!");
+      }
+    } catch (e) {
+      console.log("connect failed");
+    }
+  };
+
+  const handleConnectXverseWallet = async () => {
+    try {
+      const data = await Wallet.request("getAccounts", { purposes: [] });
+      console.log(data);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const handleConnectMagicedenWallet = async () => {
+    try {
+      if ("magicEden" in window) {
+        const magicProvider = window.magicEden?.bitcoin;
+        if (magicProvider?.isMagicEden) {
+          await magicProvider.connect();
+        }
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -31,7 +76,7 @@ const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
         contentLabel="Example Modal"
       >
         <button
-          //   onClick={}
+          onClick={handleConnectMagicedenWallet}
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto mb-5 text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
@@ -44,7 +89,7 @@ const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
           magiceden
         </button>
         <button
-          //   onClick={() => setIsOpen(!isOpen)}
+          onClick={handleConnectXverseWallet}
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto mb-5 text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
@@ -57,7 +102,7 @@ const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
           xverse
         </button>
         <button
-          //   onClick={() => setIsOpen(!isOpen)}
+          onClick={handleConnectUnisatWallet}
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
