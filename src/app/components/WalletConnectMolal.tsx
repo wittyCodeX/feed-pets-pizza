@@ -20,6 +20,23 @@ const customStyles = {
 };
 
 const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
+  const handleConnectUnisatWallet = async () => {
+    try {
+      if (typeof window.unisat !== "undefined") {
+        let accounts = await window.unisat.requestAccounts();
+
+        if (accounts) {
+          onClose(false);
+          console.log("connect success", accounts);
+        }
+      } else {
+        console.log("UniSat Wallet is not installed!");
+      }
+    } catch (e) {
+      console.log("connect failed");
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -31,7 +48,7 @@ const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
         contentLabel="Example Modal"
       >
         <button
-          //   onClick={}
+          onClick={handleConnectUnisatWallet}
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto mb-5 text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
@@ -57,7 +74,7 @@ const WalletConnectMolal = ({ isOpen, onClose }: WalletModalProps) => {
           xverse
         </button>
         <button
-          //   onClick={() => setIsOpen(!isOpen)}
+          onClick={handleConnectUnisatWallet}
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
