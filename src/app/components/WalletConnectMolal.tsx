@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import Image from "next/image";
 import Modal from "react-modal";
-import Wallet from "sats-connect";
+import { AddressPurpose, request } from "sats-connect";
 
 type WalletModalProps = {
   isOpen: boolean;
@@ -45,8 +45,22 @@ const WalletConnectMolal = ({
 
   const handleConnectXverseWallet = async () => {
     try {
-      const data = await Wallet.request("getAccounts", { purposes: [] });
-      console.log(data);
+      const response = await request("getAccounts", {
+        purposes: [
+          AddressPurpose.Ordinals,
+          AddressPurpose.Payment,
+          AddressPurpose.Stacks,
+        ],
+        message: "SATS Connect Pizza Pets",
+      });
+
+      if (response.status === "success") {
+        const address = response.result.find(
+          (address) => address.purpose === AddressPurpose.Payment
+        )?.address;
+        onClose(false);
+        connectWallet(address || "");
+      }
     } catch (error) {
       console.log("error: ", error);
     }
