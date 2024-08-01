@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import WalletConnectMolal from "./WalletConnectMolal";
+import { formatAddress } from "@/app/utils/formatAddress";
+import { setStorage } from "@/app/utils/setStorage";
 
 function Header() {
   const [address, setAddress] = useState("");
@@ -11,6 +13,7 @@ function Header() {
 
   const connectWallet = (address: string) => {
     setAddress(address);
+    setStorage("address", address);
   };
 
   const onClose = (params: boolean) => {
@@ -34,7 +37,7 @@ function Header() {
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-center gap-x-4 py-3 px-4 text-white text-[18px] h-[48px] min-w-[178px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
-          {address || "connect wallet"}
+          {formatAddress(address) || "connect wallet"}
         </button>
       </div>
 
