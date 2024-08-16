@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Modal from "react-modal";
 import { AddressPurpose, request } from "sats-connect";
