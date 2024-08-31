@@ -6,7 +6,7 @@ import { AddressPurpose, request } from "sats-connect";
 type WalletModalProps = {
   isOpen: boolean;
   onClose: (params: boolean) => void;
-  connectWallet: (address: string) => void;
+  connectWallet: (type: string, address: string) => void;
 };
 
 const customStyles = {
@@ -32,7 +32,7 @@ const WalletConnectMolal = ({
         let accounts = await window.unisat.requestAccounts();
         if (accounts) {
           onClose(false);
-          connectWallet(accounts[0]);
+          connectWallet("unisat", accounts[0] || "");
           console.log("connect success", accounts);
         }
       } else {
@@ -59,7 +59,7 @@ const WalletConnectMolal = ({
           (address) => address.purpose === AddressPurpose.Payment
         )?.address;
         onClose(false);
-        connectWallet(address || "");
+        connectWallet("xverse", address || "");
       }
     } catch (error) {
       console.log("error: ", error);
@@ -94,7 +94,7 @@ const WalletConnectMolal = ({
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto mb-5 text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
-            src="/magic-eden-logo.png"
+            src="/magiceden-logo.png"
             alt="magiceden"
             width={20}
             height={20}
@@ -120,7 +120,7 @@ const WalletConnectMolal = ({
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
         >
           <Image
-            src="/unisat.svg"
+            src="/unisat-logo.svg"
             alt="unisat"
             width={20}
             height={20}

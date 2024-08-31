@@ -2,18 +2,37 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { request } from "sats-connect";
 
-import WalletConnectMolal from "./WalletConnectMolal";
+import WalletConnectMolal from "@/app/components/WalletConnectMolal";
+import WalletDisconnectModal from "@/app/components/WalletDisconnectModal";
 import { formatAddress } from "@/app/utils/formatAddress";
 import { setStorage } from "@/app/utils/setStorage";
+import { removeStorage } from "@/app/utils/removeStorage";
 
 function Header() {
+  const [type, setType] = useState("");
   const [address, setAddress] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const connectWallet = (address: string) => {
+  const connectWallet = (type: string, address: string) => {
+    setType(type);
     setAddress(address);
     setStorage("address", address);
+    setStorage("type", type);
+  };
+
+  const disconnectWallet = async () => {
+    if (type === "unisat") {
+      await window.unisat.disconnect();
+    } else if (type === "xverse") {
+      await request("wallet_renouncePermissions");
+    }
+    setIsOpen(false);
+    removeStorage("address");
+    removeStorage("type");
+    setAddress("");
+    setType("");
   };
 
   const onClose = (params: boolean) => {
@@ -40,12 +59,20 @@ function Header() {
           {formatAddress(address) || "connect wallet"}
         </button>
       </div>
-
-      <WalletConnectMolal
-        isOpen={isOpen}
-        onClose={onClose}
-        connectWallet={connectWallet}
-      />
+      {address ? (
+        <WalletDisconnectModal
+          walletType={type}
+          isOpen={isOpen}
+          onClose={onClose}
+          disconnectWallet={disconnectWallet}
+        />
+      ) : (
+        <WalletConnectMolal
+          isOpen={isOpen}
+          onClose={onClose}
+          connectWallet={connectWallet}
+        />
+      )}
     </div>
   );
 }
