@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Modal from "react-modal";
@@ -66,19 +67,6 @@ const WalletConnectMolal = ({
     }
   };
 
-  const handleConnectMagicedenWallet = async () => {
-    try {
-      if ("magicEden" in window) {
-        const magicProvider = window.magicEden?.bitcoin;
-        if (magicProvider?.isMagicEden) {
-          await magicProvider.connect();
-        }
-      }
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  };
-
   return (
     <div>
       <Modal
@@ -89,19 +77,6 @@ const WalletConnectMolal = ({
         className="relative transform overflow-hidden bg-[#FF5400] border-4 border-black ring-4 ring-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
         contentLabel="Example Modal"
       >
-        <button
-          onClick={handleConnectMagicedenWallet}
-          className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto mb-5 text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
-        >
-          <Image
-            src="/magiceden-logo.png"
-            alt="magiceden"
-            width={20}
-            height={20}
-            priority
-          />{" "}
-          magiceden
-        </button>
         <button
           onClick={handleConnectXverseWallet}
           className="flex items-center justify-center gap-x-4 py-3 px-4 mx-auto mb-5 text-white text-[15px] h-[48px] min-w-[250px] border-4 border-black ring-4 ring-white hover:scale-105 duration-200 cursor-pointer"
