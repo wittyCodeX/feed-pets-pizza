@@ -37,7 +37,7 @@ const WalletConnectMolal = ({
           console.log("connect success", accounts);
         }
       } else {
-        console.log("UniSat Wallet is not installed!");
+        alert("UniSat Wallet is not installed! Please install now");
       }
     } catch (e) {
       console.log("connect failed");
@@ -54,7 +54,7 @@ const WalletConnectMolal = ({
         ],
         message: "SATS Connect Pizza Pets",
       });
-
+      console.log(response);
       if (response.status === "success") {
         const address = response.result.find(
           (address) => address.purpose === AddressPurpose.Payment
@@ -63,6 +63,7 @@ const WalletConnectMolal = ({
         connectWallet("xverse", address || "");
       }
     } catch (error) {
+      alert("Xverse Wallet is not installed! Please install now");
       console.log("error: ", error);
     }
   };
@@ -88,7 +89,7 @@ const WalletConnectMolal = ({
             height={20}
             priority
           />{" "}
-          xverse
+          Xverse
         </button>
         <button
           onClick={handleConnectUnisatWallet}
@@ -101,7 +102,7 @@ const WalletConnectMolal = ({
             height={20}
             priority
           />{" "}
-          unisat
+          Unisat
         </button>
       </Modal>
     </div>
